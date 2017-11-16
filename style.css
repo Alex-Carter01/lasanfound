@@ -1,0 +1,119 @@
+*{
+		font-family: "Verdana", "arial", sans-serif;
+		color: white;
+		background-color: #800080;
+}
+
+input[type="text"]{
+	background-color: white;
+	color: black;
+}
+
+.item{
+	margin-bottom: 25px;
+}
+
+.toolbar{
+	width: 500px;
+	text-decoration: none;
+	font-style: normal;
+	padding-bottom: 25px;
+	border-bottom-color: white;
+	border-bottom-width: 2px;
+	border-bottom-style: solid;
+	margin-bottom: 25px;
+}
+
+.tool-link{
+	text-decoration: none;
+}
+
+.top{
+	margin-top: 20px;
+}
+
+.bot{
+	font-weight: bold
+}
+
+.item-title{
+	font-size: 130%;
+}
+
+.item-date{
+	font-size: 70%;
+}
+
+.item-date-perm{
+	font-size: 85%;
+}
+
+.item-location{
+	font-size: 70%;
+}
+
+.item-location-perm{
+	font-size: 100%;
+}
+
+.item-description-perm{
+	font-size: 120%;
+}
+
+.submit{
+	font-size: 100%;
+	color: purple;
+	background-color: white;
+	border: 0px solid purple;
+	border-radius: 10px;
+	width: 100px;
+	height: 30px;
+	font-weight: bold;
+}
+
+.pic-get{
+	max-width: 300px;	
+}
+
+.home-pic{
+	max-height: 120px;
+}
+
+.claim{
+	font-size: 100%;
+	color: purple;
+	background-color: white;
+	border: 0px solid purple;
+	border-radius: 10px;
+	font-weight: bold;
+	height: 30px;
+	width: 120px;
+	margin-bottom: 50px;
+}
+
+.error{
+	color: red;
+	font-weight: bold;
+	margin-left: 10px;
+}
+
+.nostyle-link{
+	text-decoration: none;
+}
+
+#home-container {
+	width: 70%;
+	min-width: 700px;
+	margin: auto;
+}
+
+.congrats{
+	font-size: 50px;
+	animation-name: example;
+    animation-duration: 6s;
+}
+
+@keyframes example {
+    from {background-color: 800080;}
+    to {background-color: yellow;}
+}
