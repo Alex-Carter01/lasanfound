@@ -1,3 +1,4 @@
+#to deploy: remove the application and version lines
 application: lasanfound
 version: 1
 runtime: python27

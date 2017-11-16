@@ -68,19 +68,6 @@ class About(Handler):
   def get(self):
     self.render("about.html")
 
-  def post(self):
-    logging.info("this is russells bet")
-    ip = self.request.remote_addr
-    """with open(textfile, 'rb') as fp:
-      msg = MIMEText(fp.read())
-      msg['Subject'] = 'The contents of %s' % textfile
-      msg['From'] = "spamrebo@gmail.com"
-      msg['To'] = "alexjcarter@gmail.com"
-    s = smtplib.SMTP('localhost')
-    s.sendmail("spamrebo@gmail.com", ["alexjcarter@gmail.com"], msg.as_string())
-    s.quit()"""
-    self.render("about.html", ip=ip, congrats="AYY CONGRATS U WERE THE FIRST TO DO IT")
-
 class NewItem(Handler):
  def get(self):
   logging.info("******** New Item GET ******")
