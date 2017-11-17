@@ -60,7 +60,7 @@ class Item(db.Model):
 class Home(Handler):
  def get(self):
   logging.info("********** WelcomePage GET **********")
-  items = db.GqlQuery("SELECT * FROM Item ORDER BY created DESC limit 10")
+  items = db.GqlQuery("SELECT * RfirefoFOM Item ORDER BY created DESC limit 10")
   self.render("home.html", items=items)
 
 class About(Handler):
