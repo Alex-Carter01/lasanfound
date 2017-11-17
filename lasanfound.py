@@ -20,9 +20,8 @@ from google.appengine.ext import blobstore
 from google.appengine.ext import ndb
 from google.appengine.ext.webapp import blobstore_handlers
 import smtplib
-from email.mime.text import MIMEText
 
-## see http://jinja.pocoo.org/docs/api/#autoescaping
+#see http://jinja.pocoo.org/docs/api/#autoescaping
 def guess_autoescape(template_name):
  if template_name is None or '.' not in template_name:
   return False
@@ -30,7 +29,7 @@ def guess_autoescape(template_name):
   return ext in ('xml', 'html', 'htm')
 
 JINJA_ENVIRONMENT = jinja2.Environment(
- autoescape=guess_autoescape,     ## see http://jinja.pocoo.org/docs/api/#autoxscaping
+ autoescape=guess_autoescape, #see http://jinja.pocoo.org/docs/api/#autoxscaping
  loader=jinja2.FileSystemLoader(os.path.dirname(__file__)),
  extensions=['jinja2.ext.autoescape'])
 
@@ -72,33 +71,35 @@ class NewItem(Handler):
  def get(self):
   logging.info("******** New Item GET ******")
   upload_url = blobstore.create_upload_url('/upload')
-  #this needs to iclude a blob array
+  #this needs to include a blob array
   self.render("newitem.html", upload_url=upload_url)
 
  def post(self):
-  #need to add error hanling for a file too  large
+  #need to add error handling for a file too  large
   logging.info("******** New Item POST *******")
   upload_url = blobstore.create_upload_url('/upload')
-  title = self.request.get("title")
-  desc = self.request.get("description")
-  location = self.request.get("location")
+  title = cgi.escape(self.request.get("title"), quote=True)
+  desc = cgi.escape(self.request.get("description"), quote=True)
+  location = cgi.escape(self.request.get("location"), quote=True)
   picture = self.request.get("file")
   img_type = imghdr.what(None, picture)
   img_type = str(img_type)
   supportedtypes = ['png', 'jpeg', 'gif', 'tiff', 'bmp']
-  if(title==""):
+  if title=="":
     logging.info("error, submitted blank title")
     titleError="*Please Add a Title*"
     self.render("newitem.html", titleError=titleError, descData=desc, locData=location, upload_url=upload_url)
-  elif(img_type not in supportedtypes):
+  elif (img_type not in supportedtypes) and (img_type != "None"):
     logging.info("error, invalid file type: "+img_type)
     fileError="*Not Supported Filetype*<br><br>Supported Types: " + ", ".join(supportedtypes)
     self.render("newitem.html", fileError=fileError, descData=desc, locData=location, upload_url=upload_url, titleData=title)
   else:
     logging.info("no errors, posting item")
-    it = Item(title=title, description=desc, location=location, picture=db.Blob(picture))
+    if img_type!="None":
+      it = Item(title=title, description=desc, location=location, picture=db.Blob(picture))
+    else:
+      it = Item(title=title, description=desc, Location=location)
     it.put()
-    #item_id = it.key().id()
     time.sleep(0.1)
     self.redirect('/')
 
@@ -121,7 +122,6 @@ class PermItem(Handler):
     data = response.read()
     success = json.loads(data)['success']
     if success:
-      #this delete action isnt working
       item.delete()
       logging.info("key: "+str(item))
       time.sleep(0.1)
