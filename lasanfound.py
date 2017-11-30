@@ -19,6 +19,8 @@ from google.appengine.api import users
 from google.appengine.ext import blobstore
 from google.appengine.ext import ndb
 from google.appengine.ext.webapp import blobstore_handlers
+from google.appengine.ext import webapp
+from google.appengine.ext.webapp.util import run_wsgi_app
 import smtplib
 
 #see http://jinja.pocoo.org/docs/api/#autoescaping
@@ -140,11 +142,16 @@ class ImgHandler(Handler):
     else:
       self.error(404)
 
+class ErrorHandler(Handler):
+  def get(self):
+    self.render("error.html", error="404 page not found")
+
+
 application = webapp2.WSGIApplication([
  ('/', Home),
  ('/new', NewItem), 
  ('/about', About),
  (r'/img/(\d+)', ImgHandler),
  (r'/item/(\d+)', PermItem),
- (r'/\S+', Home),#who needs 404 errors?
+ ('/.*', ErrorHandler),#who needs 404 errors?
 ], debug=True)
