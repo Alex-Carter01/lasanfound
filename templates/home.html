@@ -6,7 +6,7 @@
     <link rel="stylesheet" type="text/css" href="/stylesheets/style.css">
   </head>
   <body>
-    <div id="home-container">
+    <div class="page-container">
       <h1>LASA 'n Found</h1>
       <div class="toolbar">
   	    <a class="tool-link" href="/about">About</a> |
@@ -21,7 +21,9 @@
               <div class="item-location">Currently in: {{item.location}}</div>
             {% endif %}
       	    <div class="item-description">{{item.description}}</div><br>
-            <div class="picture"><a class="nostyle-link" href="/item/{{item.key().id()}}"><img class="home-pic" src='/img/{{item.key().id()}}'></a></img></div>
+            {% if item.picture %}
+              <div class="picture"><a class="nostyle-link" href="/item/{{item.key().id()}}"><img class="home-pic pic" src="/img/{{item.key().id()}}"></a></img></div>
+            {% endif  %}
           </div>
         {% endfor %}
       </div>

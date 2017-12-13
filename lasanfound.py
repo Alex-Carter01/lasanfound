@@ -87,23 +87,31 @@ class NewItem(Handler):
   img_type = imghdr.what(None, picture)
   img_type = str(img_type)
   supportedtypes = ['png', 'jpeg', 'gif', 'tiff', 'bmp']
-  if title=="":
-    logging.info("error, submitted blank title")
-    titleError="*Please Add a Title*"
-    self.render("newitem.html", titleError=titleError, descData=desc, locData=location, upload_url=upload_url)
-  elif (img_type not in supportedtypes) and (img_type != "None"):
-    logging.info("error, invalid file type: "+img_type)
-    fileError="*Not Supported Filetype*<br><br>Supported Types: " + ", ".join(supportedtypes)
-    self.render("newitem.html", fileError=fileError, descData=desc, locData=location, upload_url=upload_url, titleData=title)
-  else:
-    logging.info("no errors, posting item")
-    if img_type!="None":
-      it = Item(title=title, description=desc, location=location, picture=db.Blob(picture))
+  con = httplib.HTTPSConnection("www.google.com")
+  con.request("POST", "/recaptcha/api/siteverify", urllib.urlencode({"secret": "6LdVQTQUAAAAAEla2hBTZfXSiBOiaGUjYPVcbzIg", "response": self.request.get("g-recaptcha-response"), "remoteip": self.request.remote_addr}), {"Content-Type": "application/x-www-form-urlencoded"})
+  response = con.getresponse()
+  data = response.read()
+  success = json.loads(data)['success']
+  if success:
+    if title=="":
+      logging.info("error, submitted blank title")
+      titleError="*Please Add a Title*"
+      self.render("newitem.html", titleError=titleError, descData=desc, locData=location, upload_url=upload_url)
+    elif (img_type not in supportedtypes) and (img_type != "None"):
+      logging.info("error, invalid file type: "+img_type)
+      fileError="*Not Supported Filetype*<br><br>Supported Types: " + ", ".join(supportedtypes)
+      self.render("newitem.html", fileError=fileError, descData=desc, locData=location, upload_url=upload_url, titleData=title)
     else:
-      it = Item(title=title, description=desc, Location=location)
-    it.put()
-    time.sleep(0.1)
-    self.redirect('/')
+      logging.info("no errors, posting item")
+      if img_type!="None":
+        it = Item(title=title, description=desc, location=location, picture=db.Blob(picture))
+      else:
+        it = Item(title=title, description=desc, Location=location)
+      it.put()
+      time.sleep(0.1)
+      self.redirect('/')
+  else:
+    self.render("newitem.html", descData=data, locData=location, upload_url=upload_url, )
 
 class PermItem(Handler):
   def get(self, item_id):
