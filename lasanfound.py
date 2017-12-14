@@ -79,7 +79,7 @@ class NewItem(Handler):
  def post(self):
   #need to add error handling for a file too  large
   logging.info("******** New Item POST *******")
-  upload_url = blobstore.create_upload_url('/upload')
+  #upload_url = blobstore.create_upload_url('/upload')
   title = cgi.escape(self.request.get("title"), quote=True)
   desc = cgi.escape(self.request.get("description"), quote=True)
   location = cgi.escape(self.request.get("location"), quote=True)
@@ -96,11 +96,11 @@ class NewItem(Handler):
     if title=="":
       logging.info("error, submitted blank title")
       titleError="*Please Add a Title*"
-      self.render("newitem.html", titleError=titleError, descData=desc, locData=location, upload_url=upload_url)
+      self.render("newitem.html", titleError=titleError, descData=desc, locData=location)
     elif (img_type not in supportedtypes) and (img_type != "None"):
       logging.info("error, invalid file type: "+img_type)
       fileError="*Not Supported Filetype*<br><br>Supported Types: " + ", ".join(supportedtypes)
-      self.render("newitem.html", fileError=fileError, descData=desc, locData=location, upload_url=upload_url, titleData=title)
+      self.render("newitem.html", fileError=fileError, descData=desc, locData=location, titleData=title)
     else:
       logging.info("no errors, posting item")
       if img_type!="None":
@@ -111,7 +111,8 @@ class NewItem(Handler):
       time.sleep(0.1)
       self.redirect('/')
   else:
-    self.render("newitem.html", descData=data, locData=location, upload_url=upload_url, )
+    captchaError = "Please complete reCaptcha"
+    self.render("newitem.html", titleData=title, descData=desc, locData=location, error=captchaError)
 
 class PermItem(Handler):
   def get(self, item_id):
